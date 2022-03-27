@@ -21,45 +21,45 @@ const Register = () => {
   };
 
   return (
-    <section class="hero is-primary is-fullheight">
-      <div class="hero-body">
-        <div class="container">
-          <div class="columns is-centered">
-            <div class="column is-5-tablet is-4-desktop is-3-widescreen">
-              <form action="" class="box">
-                <div class="field">
-                  <label class="label">Username</label>
-                  <div class="control has-icons-left">
+    <section className="hero is-primary is-fullheight">
+      <div className="hero-body">
+        <div className="container">
+          <div className="columns is-centered">
+            <div className="column is-5-tablet is-4-desktop is-3-widescreen">
+              <form action="" className="box">
+                <div className="field">
+                  <label className="label">Username</label>
+                  <div className="control has-icons-left">
                     <input
                       ref={userInput}
                       type="text"
                       placeholder="e.g. Reanu Keeves"
-                      class="input"
+                      className="input"
                       required
                     />
-                    <span class="icon is-small is-left">
-                      <i class="fa fa-envelope"></i>
+                    <span className="icon is-small is-left">
+                      <i className="fa fa-envelope"></i>
                     </span>
                   </div>
                 </div>
-                <div class="field">
-                  <label class="label">Password</label>
-                  <div class="control has-icons-left">
+                <div className="field">
+                  <label className="label">Password</label>
+                  <div className="control has-icons-left">
                     <input
                       ref={passInput}
                       type="password"
                       placeholder="********"
-                      class="input"
+                      className="input"
                       required
                     />
-                    <span class="icon is-small is-left">
-                      <i class="fa fa-lock"></i>
+                    <span className="icon is-small is-left">
+                      <i className="fa fa-lock"></i>
                     </span>
                   </div>
                 </div>
               </form>
-              <div class="field">
-                <button class="button is-success" onClick={OnClickHandler}>
+              <div className="field">
+                <button className="button is-success" onClick={OnClickHandler}>
                   Register
                 </button>
               </div>
