@@ -2,26 +2,24 @@ import React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Register = () => {
   let userInput = React.createRef(); // React use ref to get input value
   let passInput = React.createRef();
   const navigate = useNavigate();
 
   const OnClickHandler = (e) => {
-    const login = {
+    const register = {
       username: `${userInput.current.value}`,
       password: `${passInput.current.value}`,
     };
     axios
-      .post("http://localhost:3000/auth/signin", login)
+      .post("http://localhost:3000/auth/signup", register)
       .then(function (response) {
-        localStorage.setItem("token", response.data.accessToken);
-        navigate("/test");
+        navigate("/");
       })
-      .catch((error) => {
-        localStorage.setItem("token", null);
-      });
+      .catch((error) => {});
   };
+
   return (
     <section class="hero is-primary is-fullheight">
       <div class="hero-body">
@@ -30,9 +28,7 @@ const Login = () => {
             <div class="column is-5-tablet is-4-desktop is-3-widescreen">
               <form action="" class="box">
                 <div class="field">
-                  <label class="label">
-                    Username
-                  </label>
+                  <label class="label">Username</label>
                   <div class="control has-icons-left">
                     <input
                       ref={userInput}
@@ -47,9 +43,7 @@ const Login = () => {
                   </div>
                 </div>
                 <div class="field">
-                  <label class="label">
-                    Password
-                  </label>
+                  <label class="label">Password</label>
                   <div class="control has-icons-left">
                     <input
                       ref={passInput}
@@ -63,13 +57,10 @@ const Login = () => {
                     </span>
                   </div>
                 </div>
-                <div class="field">
-                  <a class="has-text-primary" href="/signup">Register here!</a>
-                </div>
               </form>
               <div class="field">
                 <button class="button is-success" onClick={OnClickHandler}>
-                  Login
+                  Register
                 </button>
               </div>
             </div>
@@ -80,4 +71,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
