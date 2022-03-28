@@ -30,9 +30,7 @@ const Login = () => {
             <div className="column is-5-tablet is-4-desktop is-3-widescreen">
               <form action="" className="box">
                 <div className="field">
-                  <label className="label">
-                    Username
-                  </label>
+                  <label className="label">Username</label>
                   <div className="control has-icons-left">
                     <input
                       ref={userInput}
@@ -47,9 +45,7 @@ const Login = () => {
                   </div>
                 </div>
                 <div className="field">
-                  <label className="label">
-                    Password
-                  </label>
+                  <label className="label">Password</label>
                   <div className="control has-icons-left">
                     <input
                       ref={passInput}
@@ -64,7 +60,9 @@ const Login = () => {
                   </div>
                 </div>
                 <div className="field">
-                  <a className="has-text-primary" href="/signup">Register here!</a>
+                  <a className="has-text-primary" href="/signup">
+                    Register here!
+                  </a>
                 </div>
               </form>
               <div className="field">
