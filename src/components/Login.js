@@ -16,10 +16,10 @@ const Login = () => {
       .post("http://localhost:3000/auth/signin", login)
       .then(function (response) {
         localStorage.setItem("token", response.data.accessToken);
-        navigate("/test");
+        navigate("/dashboard");
       })
       .catch((error) => {
-        localStorage.setItem("token", null);
+        localStorage.removeItem("token");
       });
   };
   return (
