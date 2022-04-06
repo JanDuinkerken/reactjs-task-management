@@ -19,7 +19,6 @@ class Dashboard extends React.Component {
       .get("http://localhost:3000/tasks", config)
       .then((response) => {
         this.setState({ tasks: response.data });
-        console.log("test");
       })
       .catch((error) => {
         console.log(error);
@@ -27,16 +26,48 @@ class Dashboard extends React.Component {
   }
 
   renderTasks() {
+    const deleteTask = (task) => {
+      console.log(task);
+      const config = {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      };
+      axios
+        .delete("http://localhost:3000/tasks/" + task.task.id, config)
+        .then((response) => {
+          this.setState({
+            tasks: this.state.tasks.filter(function (tasklist) {
+              return tasklist.id !== task.task.id;
+            }),
+          });
+          console.log("test");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+
     const { tasks } = this.state;
     return tasks.map((task) => (
-      <div class="container" key={task.id} style={{ "margin-top": "3vh" }}>
-        <div class="notification is-primary">
-          {task.id} | {task.title} | {task.description} | {task.status}
+      <article
+        className="message is-primary is-medium is-three-quarters"
+        key={task.id}
+        style={{ marginTop: "3vh" }}
+      >
+        <div className="message-header">
+          <p>{task.title}</p>
+          <button
+            className="delete is-medium"
+            aria-label="delete"
+            onClick={() => deleteTask({ task })}
+          ></button>
         </div>
-      </div>
+        <div className="message-body">
+          {task.description} | {task.status}
+        </div>
+      </article>
     ));
-
-    //return tasks.map((task) => <div key={task.id}>{task.id} | {task.title} | {task.description} | {task.status}</div>);
   }
 
   render() {

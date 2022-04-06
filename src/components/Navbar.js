@@ -1,12 +1,12 @@
 import React from "react";
 
 const Navbar = () => {
-    return (<section class="hero is-primary">
-    <div class="hero-body">
-      <p class="title">
+    return (<section className="hero is-primary">
+    <div className="hero-body">
+      <p className="title">
         Task management app
       </p>
-      <p class="subtitle">
+      <p className="subtitle">
         ReactJS 17.0.2 + NestJS 
       </p>
     </div>
