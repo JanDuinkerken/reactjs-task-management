@@ -2,9 +2,9 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 
-function PrivateRoute({ children }) {
+function SkipLogin({ children }) {
   const authenticated = auth();
-  return authenticated ? children : <Navigate to="/" />;
+  return authenticated ? <Navigate to="dashboard" /> : children;
 }
 
 function auth() {
@@ -23,4 +23,4 @@ function auth() {
         }
 }
 
-export default PrivateRoute
+export default SkipLogin;

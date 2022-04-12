@@ -18,7 +18,18 @@ class Dashboard extends React.Component {
     axios
       .get("http://localhost:3000/tasks", config)
       .then((response) => {
-        this.setState({ tasks: response.data });
+        let ordered = response.data.sort(function (a, b) {
+          if (a.status === b.status) {
+            a = a.title.toLowerCase();
+            b = b.title.toLowerCase();
+            return a < b ? -1 : a > b ? 1 : 0;
+          } else {
+            a = a.status === "OPEN" ? 1 : a.status === "IN_PROGRESS" ? 2 : 3;
+            b = b.status === "OPEN" ? 1 : b.status === "IN_PROGRESS" ? 2 : 3;
+            return a < b ? -1 : a > b ? 1 : 0;
+          }
+        });
+        this.setState({ tasks: ordered });
       })
       .catch((error) => {
         console.log(error);
@@ -46,14 +57,79 @@ class Dashboard extends React.Component {
         });
     };
 
+    const changeState = (task) => {
+      const config = {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      };
+
+      let data = { status: "OPEN" };
+
+      if (task.task.status === "IN_PROGRESS") {
+        data = { status: "DONE" };
+      }
+
+      if (task.task.status === "OPEN") {
+        data = { status: "IN_PROGRESS" };
+      }
+
+      axios
+        .patch(
+          "http://localhost:3000/tasks/" + task.task.id + "/status",
+          data,
+          config
+        )
+        .then((response) => {
+          this.setState((prevState) => ({
+            tasks: prevState.tasks.map((oldTask) =>
+              oldTask.id === task.task.id
+                ? {
+                    ...oldTask,
+                    status: response.data.status,
+                  }
+                : oldTask
+            ),
+          }));
+
+          let ordered = this.state.tasks.sort(function (a, b) {
+            if (a.status === b.status) {
+              a = a.title.toLowerCase();
+              b = b.title.toLowerCase();
+              return a < b ? -1 : a > b ? 1 : 0;
+            } else {
+              a = a.status === "OPEN" ? 1 : a.status === "IN_PROGRESS" ? 2 : 3;
+              b = b.status === "OPEN" ? 1 : b.status === "IN_PROGRESS" ? 2 : 3;
+              return a < b ? -1 : a > b ? 1 : 0;
+            }
+          });
+
+          this.setState({ tasks: ordered });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+
     const { tasks } = this.state;
     return tasks.map((task) => (
       <article
-        className="message is-primary is-medium is-three-quarters"
+        className={
+          task.status === "OPEN"
+            ? "message is-primary"
+            : task.status === "IN_PROGRESS"
+            ? "message is-warning"
+            : "message is-danger"
+        }
         key={task.id}
-        style={{ marginTop: "3vh", border: "0.05vh solid #08d4b4" }}
+        style={{
+          marginTop: "3vh",
+          border: "0.05vh solid #08d4b4",
+          userSelect: "none",
+        }}
+        onClick={() => changeState({ task })}
       >
-        <div className="message-header">
+        <div className={"message-header"}>
           <p>{task.title}</p>
           <button
             className="delete is-medium"
@@ -61,9 +137,7 @@ class Dashboard extends React.Component {
             onClick={() => deleteTask({ task })}
           ></button>
         </div>
-        <div className="message-body">
-          {task.description} | {task.status}
-        </div>
+        <div className="message-body">{task.description}</div>
       </article>
     ));
   }
@@ -88,10 +162,26 @@ class Dashboard extends React.Component {
           this.setState({
             tasks: [...this.state.tasks, response.data],
           });
+
+          let ordered = this.state.tasks.sort(function (a, b) {
+            if (a.status === b.status) {
+              a = a.title.toLowerCase();
+              b = b.title.toLowerCase();
+              return a < b ? -1 : a > b ? 1 : 0;
+            } else {
+              a = a.status === "OPEN" ? 1 : a.status === "IN_PROGRESS" ? 2 : 3;
+              b = b.status === "OPEN" ? 1 : b.status === "IN_PROGRESS" ? 2 : 3;
+              return a < b ? -1 : a > b ? 1 : 0;
+            }
+          });
+
+          this.setState({ tasks: ordered });
         })
         .catch((error) => {
           console.log("Error creating task" + error);
         });
+      titleInput.current.value = "";
+      descInput.current.value = "";
     };
 
     return (

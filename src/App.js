@@ -6,12 +6,20 @@ import Test from "./components/Test";
 import Register from "./components/Register";
 import PrivateRoute from "./components/PrivateRoute";
 import Dashboard from "./components/Dashboard";
+import SkipLogin from "./components/SkipLogin";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route
+          path="/"
+          element={
+            <SkipLogin>
+              <Login />
+            </SkipLogin>
+          }
+        />
         <Route path="signup" element={<Register />} />
         <Route path="test" element={<Test />} />
         <Route
