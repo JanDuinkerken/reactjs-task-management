@@ -27,7 +27,6 @@ class Dashboard extends React.Component {
 
   renderTasks() {
     const deleteTask = (task) => {
-      console.log(task);
       const config = {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
@@ -41,7 +40,6 @@ class Dashboard extends React.Component {
               return tasklist.id !== task.task.id;
             }),
           });
-          console.log("test");
         })
         .catch((error) => {
           console.log(error);
@@ -53,7 +51,7 @@ class Dashboard extends React.Component {
       <article
         className="message is-primary is-medium is-three-quarters"
         key={task.id}
-        style={{ marginTop: "3vh" }}
+        style={{ marginTop: "3vh", border: "0.05vh solid #08d4b4" }}
       >
         <div className="message-header">
           <p>{task.title}</p>
@@ -71,10 +69,67 @@ class Dashboard extends React.Component {
   }
 
   render() {
+    let titleInput = React.createRef(); // React use ref to get input value
+    let descInput = React.createRef();
+
+    const OnClickHandler = () => {
+      const config = {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      };
+      const newTask = {
+        title: `${titleInput.current.value}`,
+        description: `${descInput.current.value}`,
+      };
+      axios
+        .post("http://localhost:3000/tasks", newTask, config)
+        .then((response) => {
+          this.setState({
+            tasks: [...this.state.tasks, response.data],
+          });
+        })
+        .catch((error) => {
+          console.log("Error creating task" + error);
+        });
+    };
+
     return (
       <>
         <Navbar />
-        <div>{this.renderTasks()}</div>
+        <div className="container" style={{ marginTop: "3vh" }}>
+          <div className="field">
+            <label className="label">Title</label>
+            <div className="control">
+              <input
+                ref={titleInput}
+                className="input"
+                type="text"
+                placeholder="Task title"
+              />
+            </div>
+          </div>
+
+          <div className="field">
+            <label className="label">Description</label>
+            <div className="control">
+              <input
+                ref={descInput}
+                className="input"
+                type="text"
+                placeholder="Task description"
+              />
+            </div>
+          </div>
+
+          <div className="control">
+            <button className="button is-primary" onClick={OnClickHandler}>
+              Submit
+            </button>
+          </div>
+
+          <div>{this.renderTasks()}</div>
+        </div>
       </>
     );
   }
