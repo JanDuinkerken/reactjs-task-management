@@ -271,38 +271,37 @@ class Dashboard extends React.Component {
       <>
         <Navbar />
         <div className="container" style={{ marginTop: "3vh" }}>
-          <div className="field">
-            <label className="label">Search</label>
-            <div className="control">
+          <label className="label">Search</label>
+          <div className="field has-addons">
+            <div className="control is-expanded">
               <input
                 ref={searchInput}
-                className="input"
                 type="text"
-                placeholder="Search"
+                className="input is-rounded"
+                placeholder="Enter words to search"
               />
+              <span class="icon is-medium is-left">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </span>
             </div>
-          </div>
-
-          <div className="select" style={{ marginBottom: "1vh" }}>
-            <select onChange={handleChange}>
-              <option>All tasks</option>
-              <option>Open</option>
-              <option>In progress</option>
-              <option>Done</option>
-            </select>
-          </div>
-
-          <div className="control" style={{ marginBottom: "3vh" }}>
-            <button className="button is-primary" onClick={OnClickSearch}>
-              Search
-            </button>
-            <button
-              className="button is-primary"
-              onClick={OnClickAllTasks}
-              style={{ marginLeft: "4vh" }}
-            >
-              All tasks
-            </button>
+            <div className="control">
+              <div className="select" style={{ marginBottom: "1vh" }}>
+                <select onChange={handleChange}>
+                  <option>All tasks</option>
+                  <option>Open</option>
+                  <option>In progress</option>
+                  <option>Done</option>
+                </select>
+              </div>
+            </div>
+            <p className="control">
+              <button
+                className="button is-rounded is-primary"
+                onClick={OnClickSearch}
+              >
+                Search
+              </button>
+            </p>
           </div>
 
           <div className="field">
@@ -331,7 +330,7 @@ class Dashboard extends React.Component {
 
           <div className="control">
             <button className="button is-primary" onClick={OnClickHandler}>
-              Submit
+              Add
             </button>
           </div>
 
