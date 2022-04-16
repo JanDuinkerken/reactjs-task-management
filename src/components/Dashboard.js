@@ -3,6 +3,8 @@ import axios from "axios";
 import Navbar from "./Navbar";
 
 class Dashboard extends React.Component {
+  taskFilter = "All tasks";
+
   constructor(props) {
     super(props);
 
@@ -145,6 +147,81 @@ class Dashboard extends React.Component {
   render() {
     let titleInput = React.createRef(); // React use ref to get input value
     let descInput = React.createRef();
+    let searchInput = React.createRef();
+
+    const OnClickAllTasks = () => {
+      const config = {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      };
+      axios
+        .get("http://localhost:3000/tasks", config)
+        .then((response) => {
+          let ordered = response.data.sort(function (a, b) {
+            if (a.status === b.status) {
+              a = a.title.toLowerCase();
+              b = b.title.toLowerCase();
+              return a < b ? -1 : a > b ? 1 : 0;
+            } else {
+              a = a.status === "OPEN" ? 1 : a.status === "IN_PROGRESS" ? 2 : 3;
+              b = b.status === "OPEN" ? 1 : b.status === "IN_PROGRESS" ? 2 : 3;
+              return a < b ? -1 : a > b ? 1 : 0;
+            }
+          });
+          this.setState({ tasks: ordered });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+
+    const OnClickSearch = () => {
+      const config = {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      };
+      console.log(this.taskFilter);
+      let url = "http://localhost:3000/tasks";
+      if (this.taskFilter !== "All tasks") {
+        url =
+          url +
+          "?status=" +
+          (this.taskFilter === "Open"
+            ? "OPEN"
+            : this.taskFilter === "In progress"
+            ? "IN_PROGRESS"
+            : "DONE") +
+          "&search=" +
+          searchInput.current.value;
+      } else {
+        url = url + "?search=" + searchInput.current.value;
+      }
+
+      console.log(url);
+      axios
+        .get(url, config)
+        .then((response) => {
+          let ordered = response.data.sort(function (a, b) {
+            if (a.status === b.status) {
+              a = a.title.toLowerCase();
+              b = b.title.toLowerCase();
+              return a < b ? -1 : a > b ? 1 : 0;
+            } else {
+              a = a.status === "OPEN" ? 1 : a.status === "IN_PROGRESS" ? 2 : 3;
+              b = b.status === "OPEN" ? 1 : b.status === "IN_PROGRESS" ? 2 : 3;
+              return a < b ? -1 : a > b ? 1 : 0;
+            }
+          });
+
+          this.setState({ tasks: ordered });
+        })
+        .catch((error) => {
+          console.log("Error getting tasks" + error);
+        });
+      searchInput.current.value = "";
+    };
 
     const OnClickHandler = () => {
       const config = {
@@ -184,10 +261,50 @@ class Dashboard extends React.Component {
       descInput.current.value = "";
     };
 
+    const handleChange = (event) => {
+      this.taskFilter = event.target.value;
+      console.log(this.taskFilter);
+      console.log(event.target.value);
+    };
+
     return (
       <>
         <Navbar />
         <div className="container" style={{ marginTop: "3vh" }}>
+          <div className="field">
+            <label className="label">Search</label>
+            <div className="control">
+              <input
+                ref={searchInput}
+                className="input"
+                type="text"
+                placeholder="Search"
+              />
+            </div>
+          </div>
+
+          <div className="select" style={{ marginBottom: "1vh" }}>
+            <select onChange={handleChange}>
+              <option>All tasks</option>
+              <option>Open</option>
+              <option>In progress</option>
+              <option>Done</option>
+            </select>
+          </div>
+
+          <div className="control" style={{ marginBottom: "3vh" }}>
+            <button className="button is-primary" onClick={OnClickSearch}>
+              Search
+            </button>
+            <button
+              className="button is-primary"
+              onClick={OnClickAllTasks}
+              style={{ marginLeft: "4vh" }}
+            >
+              All tasks
+            </button>
+          </div>
+
           <div className="field">
             <label className="label">Title</label>
             <div className="control">
