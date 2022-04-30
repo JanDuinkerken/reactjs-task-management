@@ -149,33 +149,6 @@ class Dashboard extends React.Component {
     let descInput = React.createRef();
     let searchInput = React.createRef();
 
-    const OnClickAllTasks = () => {
-      const config = {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      };
-      axios
-        .get("http://localhost:3000/tasks", config)
-        .then((response) => {
-          let ordered = response.data.sort(function (a, b) {
-            if (a.status === b.status) {
-              a = a.title.toLowerCase();
-              b = b.title.toLowerCase();
-              return a < b ? -1 : a > b ? 1 : 0;
-            } else {
-              a = a.status === "OPEN" ? 1 : a.status === "IN_PROGRESS" ? 2 : 3;
-              b = b.status === "OPEN" ? 1 : b.status === "IN_PROGRESS" ? 2 : 3;
-              return a < b ? -1 : a > b ? 1 : 0;
-            }
-          });
-          this.setState({ tasks: ordered });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
-
     const OnClickSearch = () => {
       const config = {
         headers: {
